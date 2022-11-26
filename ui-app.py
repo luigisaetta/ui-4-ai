@@ -8,7 +8,9 @@ from PIL import Image
 import pandas as pd
 import streamlit as st
 
+# all configs should be put in config.py
 from config import APP_DIR, LOGO, FILE_TYPE_SUPPORTED
+
 #
 # Configs
 #
@@ -26,7 +28,9 @@ def load_model(model_name):
 
     return model
 
+
 # Set app wide config
+# should we move the string to the config file?
 st.set_page_config(
     page_title="AI powered app | UI",
     page_icon="🤖",
@@ -38,7 +42,6 @@ st.set_page_config(
     },
 )
 
-# load a logo
 # add a logo
 image = Image.open(APP_DIR / LOGO)
 img_widg = st.sidebar.image(image)
@@ -50,7 +53,24 @@ with st.sidebar.form("input_form"):
     # see list of supported file type
     input_file = st.file_uploader("File", type=file_type_supported)
 
+    # add a radio button
+    process_mode = st.radio(
+        label="Process mode", options=["Yes", "No"], horizontal=True
+    )
+
     process = st.form_submit_button(label="Process")
 
 if process:
-    print("Do something useful...")
+    # shows a spinner indicator
+    with st.spinner("Work in progress..."):
+        t_start = time.time()
+
+        print("Do something useful...")
+        print(f"Process mode is {process_mode}")
+        # simulate
+        time.sleep(2)
+
+        t_ela = round(time.time() - t_start, 1)
+
+        print()
+        print(f"Elapsed time: {t_ela} sec.")

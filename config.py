@@ -8,4 +8,4 @@ APP_DIR = pathlib.Path(__file__).parent.absolute()
 LOGO = "logo.png"
 
 # the list of file type supported (and that can be loaded)
-FILE_TYPE_SUPPORTED = ["wav"]
+FILE_TYPE_SUPPORTED = ["csv"]
