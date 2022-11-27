@@ -49,7 +49,7 @@ class Processor:
         self.ENDPOINT = OCI_MODEL_ENDPOINT
         self.config = config = oci.config.from_file()
         # the OCI Vision model we're using
-        self.MODEL_ID =  OCI_MODEL_ID
+        self.MODEL_ID = OCI_MODEL_ID
 
         # default (can be changed by slider in the ui)
         self.EVERY = 1
@@ -123,7 +123,7 @@ class Processor:
 
         video.release()
 
-        # after creating the video we must cancel the jpg in out dir... 
+        # after creating the video we must cancel the jpg in out dir...
         # otherwise changing the "every" parameters
         # in the next run we have a bug !
         print("Deleting annotated jpg files...")

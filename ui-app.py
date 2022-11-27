@@ -117,7 +117,6 @@ if process:
         print(f"Model type is {model_type}")
         model = load_model(model_type)
 
-
         t_start = time.time()
 
         print(f"Process mode is {process_mode}")
