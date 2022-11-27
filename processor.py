@@ -1,11 +1,11 @@
 #
 # as an example: process an mp4 file
 #
+import os
 import cv2
 import pandas as pd
 from glob import glob
 from tqdm import tqdm
-import time
 
 # for OCI Vision client
 import oci
@@ -14,12 +14,13 @@ from oci.ai_vision import AIServiceVisionClient
 from oci_vision_utilities import OCIVisionImage
 
 from config import LOCAL_DIR, LOCAL_DIR_OUT
+from config import OCI_MODEL_ENDPOINT, OCI_MODEL_ID
 
 # color map for logos
 logo_names = ["Mobil1", "Oracle", "RedBull", "Siemens"]
 
 label_map = {}
-# the label returned from OCI Visio is Mobil1 and not Mobil
+# the label returned from OCI Vision is Mobil1 and not Mobil
 label_map["Mobil1"] = [169, 23, 69]  # blue
 label_map["Oracle"] = [64, 57, 144]  # red [169, 23, 69]
 label_map["RedBull"] = [112, 168, 162]  # green
@@ -45,12 +46,12 @@ class Processor:
     # removed start and duration, simplified
 
     def __init__(self):
-        self.ENDPOINT = "https://vision.aiservice.eu-frankfurt-1.oci.oraclecloud.com"
+        self.ENDPOINT = OCI_MODEL_ENDPOINT
         self.config = config = oci.config.from_file()
         # the OCI Vision model we're using
-        self.MODEL_ID = "ocid1.aivisionmodel.oc1.eu-frankfurt-1.amaaaaaangencdyarrrcfnwo2yly3goldt4zwvvcs2bkerzwfrbntli74sta"
+        self.MODEL_ID =  OCI_MODEL_ID
 
-        # default
+        # default (can be changed by slider in the ui)
         self.EVERY = 1
 
     def extract_images(self, video_file_name):
@@ -121,6 +122,16 @@ class Processor:
                 pbar.update(1)
 
         video.release()
+
+        # after creating the video we must cancel the jpg in out dir... 
+        # otherwise changing the "every" parameters
+        # in the next run we have a bug !
+        print("Deleting annotated jpg files...")
+        print()
+        with tqdm(total=len(frame_bb_list)) as pbar:
+            for f_name in frame_bb_list:
+                os.remove(f_name)
+                pbar.update(1)
 
     def process_images(self, video_file_name, every, threshold):
         # set evey from the slider

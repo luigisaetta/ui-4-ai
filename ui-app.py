@@ -1,16 +1,12 @@
 #
 # L. Saetta, 2022
+# this one is the general template
 #
 
 # check what imports you really need
 import time
 from PIL import Image
-import pandas as pd
-import cv2
 import streamlit as st
-import matplotlib.pyplot as plt
-
-from processor import Processor
 
 # all configs should be put in config.py
 from config import APP_DIR, LOGO, FILE_TYPE_SUPPORTED
@@ -44,26 +40,6 @@ def load_model(model_name):
     time.sleep(2)
 
     return model
-
-
-@st.experimental_singleton
-def get_processor():
-    processor = Processor()
-
-    return processor
-
-
-def prepare_pie_plot(dict_res):
-    list_keys = [key for key in dict_res.keys() if int(dict_res[key]) > 0]
-    list_values = [dict_res[key] for key in dict_res.keys() if int(dict_res[key]) > 0]
-
-    fig1, ax1 = plt.subplots()
-    ax1.pie(
-        list_values, labels=list_keys, autopct="%1.0f%%", shadow=False, startangle=90
-    )
-    ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
-
-    return fig1
 
 
 # Set app wide config
@@ -141,7 +117,6 @@ if process:
         print(f"Model type is {model_type}")
         model = load_model(model_type)
 
-        processor = get_processor()
 
         t_start = time.time()
 
@@ -150,16 +125,10 @@ if process:
         #
         # here we do the main processing
         #
-        with st.spinner("Extracting images..."):
-            processor.extract_images(input_file.name)
-
-        with st.spinner("Processing images..."):
-            dict_res = processor.process_images(input_file.name, every, threshold)
-
-            # in dict_res whe have the statistics
-
-        with st.spinner("Building annotated film..."):
-            processor.build_bb_film(input_file.name)
+        with st.spinner("Processing..."):
+            print("Do something useful here...")
+            print()
+            time.sleep(2)
 
         t_ela = round(time.time() - t_start, 1)
 
@@ -169,28 +138,10 @@ if process:
 
         col1.subheader(f"Statistics...")
 
-        # prepare the pie plot
-
-        with col1:
-            fig1 = prepare_pie_plot(dict_res)
-
-            st.pyplot(fig1)
-
-        col1.write("Counts of frame with logo:")
-        col1.write(dict_res)
-
-        # show the new video
-        new_video_name = input_file.name.split(".")[0] + "_bb.mp4"
-
-        new_file_path = LOCAL_DIR_OUT / new_video_name
-        with open(new_file_path, "rb") as vf:
-            video_bytes = vf.read()
-
-        col2.subheader(f"Video with BB...")
-        col2.video(video_bytes)
+        col1.write("Output here:")
 
         # happy... has finished
-        st.success("Elaboration finished", icon="✅")
+        st.success("Elaborations finished", icon="✅")
     else:
         # no file? please, upload it
         st.error("Please upload a file!")

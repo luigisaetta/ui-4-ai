@@ -11,3 +11,7 @@ LOGO = "logo.png"
 
 # the list of file type supported (and that can be loaded)
 FILE_TYPE_SUPPORTED = ["mp4"]
+
+# parameters for model
+OCI_MODEL_ENDPOINT = "https://vision.aiservice.eu-frankfurt-1.oci.oraclecloud.com"
+OCI_MODEL_ID = "ocid1.aivisionmodel.oc1.eu-frankfurt-1.amaaaaaangencdyarrrcfnwo2yly3goldt4zwvvcs2bkerzwfrbntli74sta"

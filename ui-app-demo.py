@@ -5,8 +5,6 @@
 # check what imports you really need
 import time
 from PIL import Image
-import pandas as pd
-import cv2
 import streamlit as st
 import matplotlib.pyplot as plt
 
@@ -41,7 +39,7 @@ def load_model(model_name):
     # simulate
     print("Loading model...")
     print()
-    time.sleep(2)
+    time.sleep(1)
 
     return model
 
@@ -145,8 +143,6 @@ if process:
 
         t_start = time.time()
 
-        print(f"Process mode is {process_mode}")
-
         #
         # here we do the main processing
         #
@@ -176,7 +172,7 @@ if process:
 
             st.pyplot(fig1)
 
-        col1.write("Counts of frame with logo:")
+        col1.write("Counts of frames with logo:")
         col1.write(dict_res)
 
         # show the new video
@@ -186,11 +182,11 @@ if process:
         with open(new_file_path, "rb") as vf:
             video_bytes = vf.read()
 
-        col2.subheader(f"Video with BB...")
+        col2.subheader(f"Annotated Video...")
         col2.video(video_bytes)
 
         # happy... has finished
-        st.success("Elaboration finished", icon="✅")
+        st.success("Elaborations finished", icon="✅")
     else:
         # no file? please, upload it
         st.error("Please upload a file!")
